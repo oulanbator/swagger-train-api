@@ -2,104 +2,141 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.Ville;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
  * Gare
  */
+@Entity
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2022-05-31T18:27:48.019Z")
-
-
 public class Gare   {
-  @JsonProperty("id")
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id = null;
 
   @JsonProperty("nom")
   private String nom = null;
 
-  @JsonProperty("ville")
+  @OneToMany(mappedBy = "gareDepart", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
   @Valid
-  private List<Ville> ville = null;
+  private List<Train> trainsDeparts = null;
 
-  public Gare id(Long id) {
-    this.id = id;
-    return this;
+  @OneToMany(mappedBy = "gareArrivee", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+  @Valid
+  private List<Train> trainsArrivees = null;
+
+  @OneToMany(mappedBy = "gare", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+  @JsonProperty("villes")
+  @Valid
+  private List<Ville> villes = null;
+
+  @OneToMany(mappedBy = "gare", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+  @Valid
+  private List<Arret> arrets = null;
+
+  public Gare() {
   }
 
-  /**
-   * Get id
-   * @return id
-  **/
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public Gare nom(String nom) {
+  public Gare(String nom, List<Ville> villes) {
     this.nom = nom;
-    return this;
+    this.villes = villes;
   }
+
+
+//  /**
+//   * Get id
+//   * @return id
+//  **/
+//  @ApiModelProperty(required = true, value = "")
+//  @NotNull
+
+//  public Long getId() {
+//    return id;
+//  }
+
+//  public void setId(Long id) {
+//    this.id = id;
+//  }
+//  public Gare id(Long id) {
+//    this.id = id;
+//    return this;
+//  }
+
 
   /**
    * Get nom
    * @return nom
   **/
   @ApiModelProperty(value = "")
-
-
   public String getNom() {
     return nom;
   }
-
   public void setNom(String nom) {
     this.nom = nom;
   }
+//  public Gare nom(String nom) {
+//    this.nom = nom;
+//    return this;
+//  }
 
-  public Gare ville(List<Ville> ville) {
-    this.ville = ville;
-    return this;
-  }
-
-  public Gare addVilleItem(Ville villeItem) {
-    if (this.ville == null) {
-      this.ville = new ArrayList<Ville>();
-    }
-    this.ville.add(villeItem);
-    return this;
-  }
 
   /**
    * Get ville
    * @return ville
   **/
   @ApiModelProperty(value = "")
-
   @Valid
+  public List<Ville> getVilles() {
+    return villes;
+  }
+  public void setVilles(List<Ville> ville) {
+    this.villes = ville;
+  }
+//  public Gare ville(List<Ville> ville) {
+//    this.ville = ville;
+//    return this;
+//  }
 
-  public List<Ville> getVille() {
-    return ville;
+
+  public Gare addVilleItem(Ville villeItem) {
+    if (this.villes == null) {
+      this.villes = new ArrayList<Ville>();
+    }
+    this.villes.add(villeItem);
+    return this;
   }
 
-  public void setVille(List<Ville> ville) {
-    this.ville = ville;
+  public Gare addArretItem(Arret arretItem) {
+    if (this.arrets == null) {
+      this.arrets = new ArrayList<Arret>();
+    }
+    this.arrets.add(arretItem);
+    return this;
   }
 
+  public Gare addTrainDepartItem(Train trainItem) {
+    if (this.trainsDeparts == null) {
+      this.trainsDeparts = new ArrayList<Train>();
+    }
+    this.trainsDeparts.add(trainItem);
+    return this;
+  }
+
+  public Gare addTrainArriveeItem(Train trainItem) {
+    if (this.trainsArrivees == null) {
+      this.trainsArrivees = new ArrayList<Train>();
+    }
+    this.trainsArrivees.add(trainItem);
+    return this;
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -112,22 +149,19 @@ public class Gare   {
     Gare gare = (Gare) o;
     return Objects.equals(this.id, gare.id) &&
         Objects.equals(this.nom, gare.nom) &&
-        Objects.equals(this.ville, gare.ville);
+        Objects.equals(this.villes, gare.villes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, nom, ville);
+    return Objects.hash(id, nom, villes);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Gare {\n");
-    
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    nom: ").append(toIndentedString(nom)).append("\n");
-    sb.append("    ville: ").append(toIndentedString(ville)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -8,18 +8,20 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.model.Gare;
 import io.swagger.model.Train;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
  * Arret
  */
+@Entity
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2022-05-31T18:27:48.019Z")
-
-
 public class Arret   {
-  @JsonProperty("id")
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id = null;
 
   @JsonProperty("heureDepart")
@@ -28,15 +30,24 @@ public class Arret   {
   @JsonProperty("heureArrivee")
   private Integer heureArrivee = null;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "train_id")
   @JsonProperty("train")
   private Train train = null;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "gare_id")
   @JsonProperty("gare")
   private Gare gare = null;
 
-  public Arret id(Long id) {
-    this.id = id;
-    return this;
+  public Arret() {
+  }
+
+  public Arret(Integer heureDepart, Integer heureArrivee, Train train, Gare gare) {
+    this.heureDepart = heureDepart;
+    this.heureArrivee = heureArrivee;
+    this.train = train;
+    this.gare = gare;
   }
 
   /**
@@ -45,97 +56,85 @@ public class Arret   {
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
-
   public Long getId() {
     return id;
   }
-
   public void setId(Long id) {
     this.id = id;
   }
-
-  public Arret heureDepart(Integer heureDepart) {
-    this.heureDepart = heureDepart;
-    return this;
-  }
+//  public Arret id(Long id) {
+//    this.id = id;
+//    return this;
+//  }
 
   /**
    * Get heureDepart
    * @return heureDepart
   **/
   @ApiModelProperty(value = "")
-
-
   public Integer getHeureDepart() {
     return heureDepart;
   }
-
   public void setHeureDepart(Integer heureDepart) {
     this.heureDepart = heureDepart;
   }
+//  public Arret heureDepart(Integer heureDepart) {
+//    this.heureDepart = heureDepart;
+//    return this;
+//  }
 
-  public Arret heureArrivee(Integer heureArrivee) {
-    this.heureArrivee = heureArrivee;
-    return this;
-  }
 
   /**
    * Get heureArrivee
    * @return heureArrivee
   **/
   @ApiModelProperty(value = "")
-
-
   public Integer getHeureArrivee() {
     return heureArrivee;
   }
-
   public void setHeureArrivee(Integer heureArrivee) {
     this.heureArrivee = heureArrivee;
   }
+//  public Arret heureArrivee(Integer heureArrivee) {
+//    this.heureArrivee = heureArrivee;
+//    return this;
+//  }
 
-  public Arret train(Train train) {
-    this.train = train;
-    return this;
-  }
 
   /**
    * Get train
    * @return train
   **/
   @ApiModelProperty(value = "")
-
   @Valid
-
   public Train getTrain() {
     return train;
   }
-
   public void setTrain(Train train) {
     this.train = train;
   }
+//  public Arret train(Train train) {
+//    this.train = train;
+//    return this;
+//  }
 
-  public Arret gare(Gare gare) {
-    this.gare = gare;
-    return this;
-  }
 
   /**
    * Get gare
    * @return gare
   **/
   @ApiModelProperty(value = "")
-
   @Valid
-
   public Gare getGare() {
     return gare;
   }
-
   public void setGare(Gare gare) {
     this.gare = gare;
   }
+//  public Arret gare(Gare gare) {
+//    this.gare = gare;
+//    return this;
+//  }
 
 
   @Override

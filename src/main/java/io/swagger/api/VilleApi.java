@@ -5,6 +5,7 @@
  */
 package io.swagger.api;
 
+import io.swagger.model.Train;
 import io.swagger.model.Ville;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,15 @@ public interface VilleApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Void> addVille(@ApiParam(value = "ville à ajouter"  )  @Valid @RequestBody Ville ville);
+    ResponseEntity<ApiResponseMessage> addVille(@ApiParam(value = "ville à ajouter"  )  @Valid @RequestBody Ville ville);
+
+    @ApiOperation(value = "récupère l'ensemble des villes", nickname = "getVilles", notes = "Récupère l'ensemble des villes ", response = Ville.class, responseContainer = "List", tags={ "villes", })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "la liste des villes", response = Ville.class, responseContainer = "List"),
+            @ApiResponse(code = 500, message = "internal server error") })
+    @RequestMapping(value = "/villes",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<List<Ville>> getVilles();
 
 }

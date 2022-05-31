@@ -1,5 +1,7 @@
 package io.swagger.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -7,18 +9,20 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.model.Gare;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
  * Train
  */
+@Entity
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2022-05-31T18:27:48.019Z")
-
-
 public class Train   {
-  @JsonProperty("id")
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id = null;
 
   @JsonProperty("numero")
@@ -31,20 +35,42 @@ public class Train   {
   private Integer heureArrivee = null;
 
   @JsonProperty("dateDepart")
-  private Integer dateDepart = null;
+  private String dateDepart = null;
 
   @JsonProperty("dateArrivee")
-  private Integer dateArrivee = null;
+  private String dateArrivee = null;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "gare_depart_id")
   @JsonProperty("gareDepart")
   private Gare gareDepart = null;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "gare_arrivee_id")
   @JsonProperty("gareArrivee")
   private Gare gareArrivee = null;
 
-  public Train id(Long id) {
-    this.id = id;
-    return this;
+  @OneToMany(mappedBy = "train", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+  private List<Reservation> reservations;
+
+  @OneToMany(mappedBy = "train", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+  private List<Arret> arrets;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "compagnie_id")
+  private Compagnie compagnie;
+
+  public Train() {
+  }
+
+  public Train(Integer numero, Integer heureDepart, Integer heureArrivee, String dateDepart, String dateArrivee, Gare gareDepart, Gare gareArrivee) {
+    this.numero = numero;
+    this.heureDepart = heureDepart;
+    this.heureArrivee = heureArrivee;
+    this.dateDepart = dateDepart;
+    this.dateArrivee = dateArrivee;
+    this.gareDepart = gareDepart;
+    this.gareArrivee = gareArrivee;
   }
 
   /**
@@ -53,158 +79,154 @@ public class Train   {
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
-
   public Long getId() {
     return id;
   }
-
   public void setId(Long id) {
     this.id = id;
   }
+//  public Train id(Long id) {
+//    this.id = id;
+//    return this;
+//  }
 
-  public Train numero(Integer numero) {
-    this.numero = numero;
-    return this;
-  }
 
   /**
    * Get numero
    * @return numero
   **/
   @ApiModelProperty(value = "")
-
-
   public Integer getNumero() {
     return numero;
   }
-
   public void setNumero(Integer numero) {
     this.numero = numero;
   }
+//  public Train numero(Integer numero) {
+//    this.numero = numero;
+//    return this;
+//  }
 
-  public Train heureDepart(Integer heureDepart) {
-    this.heureDepart = heureDepart;
-    return this;
-  }
 
   /**
    * Get heureDepart
    * @return heureDepart
   **/
   @ApiModelProperty(value = "")
-
-
   public Integer getHeureDepart() {
     return heureDepart;
   }
-
   public void setHeureDepart(Integer heureDepart) {
     this.heureDepart = heureDepart;
   }
+//  public Train heureDepart(Integer heureDepart) {
+//    this.heureDepart = heureDepart;
+//    return this;
+//  }
 
-  public Train heureArrivee(Integer heureArrivee) {
-    this.heureArrivee = heureArrivee;
-    return this;
-  }
 
   /**
    * Get heureArrivee
    * @return heureArrivee
   **/
   @ApiModelProperty(value = "")
-
-
   public Integer getHeureArrivee() {
     return heureArrivee;
   }
-
   public void setHeureArrivee(Integer heureArrivee) {
     this.heureArrivee = heureArrivee;
   }
+//  public Train heureArrivee(Integer heureArrivee) {
+//    this.heureArrivee = heureArrivee;
+//    return this;
+//  }
 
-  public Train dateDepart(Integer dateDepart) {
-    this.dateDepart = dateDepart;
-    return this;
-  }
 
   /**
    * Get dateDepart
    * @return dateDepart
   **/
   @ApiModelProperty(value = "")
-
-
-  public Integer getDateDepart() {
+  public String getDateDepart() {
     return dateDepart;
   }
-
-  public void setDateDepart(Integer dateDepart) {
+  public void setDateDepart(String dateDepart) {
     this.dateDepart = dateDepart;
   }
+//  public Train dateDepart(Integer dateDepart) {
+//    this.dateDepart = dateDepart;
+//    return this;
+//  }
 
-  public Train dateArrivee(Integer dateArrivee) {
-    this.dateArrivee = dateArrivee;
-    return this;
-  }
 
   /**
    * Get dateArrivee
    * @return dateArrivee
   **/
   @ApiModelProperty(value = "")
-
-
-  public Integer getDateArrivee() {
+  public String getDateArrivee() {
     return dateArrivee;
   }
-
-  public void setDateArrivee(Integer dateArrivee) {
+  public void setDateArrivee(String dateArrivee) {
     this.dateArrivee = dateArrivee;
   }
+//  public Train dateArrivee(Integer dateArrivee) {
+//    this.dateArrivee = dateArrivee;
+//    return this;
+//  }
 
-  public Train gareDepart(Gare gareDepart) {
-    this.gareDepart = gareDepart;
-    return this;
-  }
 
   /**
    * Get gareDepart
    * @return gareDepart
   **/
   @ApiModelProperty(value = "")
-
   @Valid
-
   public Gare getGareDepart() {
     return gareDepart;
   }
-
   public void setGareDepart(Gare gareDepart) {
     this.gareDepart = gareDepart;
   }
+//  public Train gareDepart(Gare gareDepart) {
+//    this.gareDepart = gareDepart;
+//    return this;
+//  }
 
-  public Train gareArrivee(Gare gareArrivee) {
-    this.gareArrivee = gareArrivee;
-    return this;
-  }
 
   /**
    * Get gareArrivee
    * @return gareArrivee
   **/
   @ApiModelProperty(value = "")
-
   @Valid
-
   public Gare getGareArrivee() {
     return gareArrivee;
   }
-
   public void setGareArrivee(Gare gareArrivee) {
     this.gareArrivee = gareArrivee;
   }
+//  public Train gareArrivee(Gare gareArrivee) {
+//    this.gareArrivee = gareArrivee;
+//    return this;
+//  }
 
+
+  public Train addReservationItem(Reservation reservationItem) {
+    if (this.reservations == null) {
+      this.reservations = new ArrayList<Reservation>();
+    }
+    this.reservations.add(reservationItem);
+    return this;
+  }
+
+  public Train addArretItem(Arret arretItem) {
+    if (this.arrets == null) {
+      this.arrets = new ArrayList<Arret>();
+    }
+    this.arrets.add(arretItem);
+    return this;
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {

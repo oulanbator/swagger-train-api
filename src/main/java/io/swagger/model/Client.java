@@ -1,23 +1,27 @@
 package io.swagger.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
  * Client
  */
+@Entity
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2022-05-31T18:27:48.019Z")
-
-
 public class Client   {
-  @JsonProperty("id")
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id = null;
 
   @JsonProperty("nom")
@@ -32,9 +36,17 @@ public class Client   {
   @JsonProperty("telephone")
   private String telephone = null;
 
-  public Client id(Long id) {
-    this.id = id;
-    return this;
+  @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+  private List<Reservation> reservations;
+
+  public Client() {
+  }
+
+  public Client(String nom, String prenom, String adresse, String telephone) {
+    this.nom = nom;
+    this.prenom = prenom;
+    this.adresse = adresse;
+    this.telephone = telephone;
   }
 
   /**
@@ -43,96 +55,93 @@ public class Client   {
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
-
   public Long getId() {
     return id;
   }
-
   public void setId(Long id) {
     this.id = id;
   }
+//  public Client id(Long id) {
+//    this.id = id;
+//    return this;
+//  }
 
-  public Client nom(String nom) {
-    this.nom = nom;
-    return this;
-  }
 
   /**
    * Get nom
    * @return nom
   **/
   @ApiModelProperty(value = "")
-
-
   public String getNom() {
     return nom;
   }
-
   public void setNom(String nom) {
     this.nom = nom;
   }
+//  public Client nom(String nom) {
+//    this.nom = nom;
+//    return this;
+//  }
 
-  public Client prenom(String prenom) {
-    this.prenom = prenom;
-    return this;
-  }
 
   /**
    * Get prenom
    * @return prenom
   **/
   @ApiModelProperty(value = "")
-
-
   public String getPrenom() {
     return prenom;
   }
-
   public void setPrenom(String prenom) {
     this.prenom = prenom;
   }
+//  public Client prenom(String prenom) {
+//    this.prenom = prenom;
+//    return this;
+//  }
 
-  public Client adresse(String adresse) {
-    this.adresse = adresse;
-    return this;
-  }
 
   /**
    * Get adresse
    * @return adresse
   **/
   @ApiModelProperty(value = "")
-
-
   public String getAdresse() {
     return adresse;
   }
-
   public void setAdresse(String adresse) {
     this.adresse = adresse;
   }
+//  public Client adresse(String adresse) {
+//    this.adresse = adresse;
+//    return this;
+//  }
 
-  public Client telephone(String telephone) {
-    this.telephone = telephone;
-    return this;
-  }
 
   /**
    * Get telephone
    * @return telephone
   **/
   @ApiModelProperty(value = "")
-
-
   public String getTelephone() {
     return telephone;
   }
-
   public void setTelephone(String telephone) {
     this.telephone = telephone;
   }
+//  public Client telephone(String telephone) {
+//    this.telephone = telephone;
+//    return this;
+//  }
 
+
+  public Client addReservationItem(Reservation reservationItem) {
+    if (this.reservations == null) {
+      this.reservations = new ArrayList<Reservation>();
+    }
+    this.reservations.add(reservationItem);
+    return this;
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {

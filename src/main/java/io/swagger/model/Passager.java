@@ -1,23 +1,27 @@
 package io.swagger.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
  * Passager
  */
+@Entity
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2022-05-31T18:27:48.019Z")
-
-
 public class Passager   {
-  @JsonProperty("id")
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id = null;
 
   @JsonProperty("nom")
@@ -26,9 +30,15 @@ public class Passager   {
   @JsonProperty("prenom")
   private String prenom = null;
 
-  public Passager id(Long id) {
-    this.id = id;
-    return this;
+  @OneToMany(mappedBy = "passager", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+  private List<Reservation> reservations;
+
+  public Passager() {
+  }
+
+  public Passager(String nom, String prenom) {
+    this.nom = nom;
+    this.prenom = prenom;
   }
 
   /**
@@ -37,56 +47,59 @@ public class Passager   {
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
-
   public Long getId() {
     return id;
   }
-
   public void setId(Long id) {
     this.id = id;
   }
+//  public Passager id(Long id) {
+//    this.id = id;
+//    return this;
+//  }
 
-  public Passager nom(String nom) {
-    this.nom = nom;
-    return this;
-  }
 
   /**
    * Get nom
    * @return nom
   **/
   @ApiModelProperty(value = "")
-
-
   public String getNom() {
     return nom;
   }
-
   public void setNom(String nom) {
     this.nom = nom;
   }
+//  public Passager nom(String nom) {
+//    this.nom = nom;
+//    return this;
+//  }
 
-  public Passager prenom(String prenom) {
-    this.prenom = prenom;
-    return this;
-  }
 
   /**
    * Get prenom
    * @return prenom
   **/
   @ApiModelProperty(value = "")
-
-
   public String getPrenom() {
     return prenom;
   }
-
   public void setPrenom(String prenom) {
     this.prenom = prenom;
   }
+//  public Passager prenom(String prenom) {
+//    this.prenom = prenom;
+//    return this;
+//  }
 
+
+  public Passager addReservationItem(Reservation reservationItem) {
+    if (this.reservations == null) {
+      this.reservations = new ArrayList<Reservation>();
+    }
+    this.reservations.add(reservationItem);
+    return this;
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {

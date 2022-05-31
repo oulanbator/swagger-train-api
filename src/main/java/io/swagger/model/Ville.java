@@ -6,26 +6,39 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
  * Ville
  */
+@Entity
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2022-05-31T18:27:48.019Z")
-
-
 public class Ville   {
-  @JsonProperty("id")
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id = null;
 
   @JsonProperty("nom")
   private String nom = null;
 
-  public Ville id(Long id) {
-    this.id = id;
-    return this;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "gare_id")
+  private Gare gare;
+
+  public Ville() {
+  }
+
+  public Ville(String nom) {
+    this.nom = nom;
+  }
+
+  public Ville(String nom, Gare gare) {
+    this.nom = nom;
+    this.gare = gare;
   }
 
   /**
@@ -34,35 +47,33 @@ public class Ville   {
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
-
   public Long getId() {
     return id;
   }
-
   public void setId(Long id) {
     this.id = id;
   }
+//  public Ville id(Long id) {
+//    this.id = id;
+//    return this;
+//  }
 
-  public Ville nom(String nom) {
-    this.nom = nom;
-    return this;
-  }
 
   /**
    * Get nom
    * @return nom
   **/
   @ApiModelProperty(value = "")
-
-
   public String getNom() {
     return nom;
   }
-
   public void setNom(String nom) {
     this.nom = nom;
   }
+//  public Ville nom(String nom) {
+//    this.nom = nom;
+//    return this;
+//  }
 
 
   @Override
