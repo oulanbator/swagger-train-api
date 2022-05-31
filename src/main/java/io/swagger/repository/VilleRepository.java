@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface VilleRepository extends JpaRepository<Ville, Long> {
-    Optional<Ville> findById(Long id);
     Optional<Ville> findByNom(String nom);
 }
