@@ -1,5 +1,6 @@
 package io.swagger.model;
 
+import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -37,10 +38,13 @@ public class Reservation   {
   @JsonProperty("train")
   private Train train = null;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "passager_id")
-  @JsonProperty("passager")
-  private Passager passager = null;
+  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinTable(
+          name = "passagers_reservations",
+          joinColumns = @JoinColumn(name = "reservation_id"),
+          inverseJoinColumns = @JoinColumn(name = "passager_id"))
+  @JsonProperty("passagers")
+  private List<Passager> passagers = null;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "client_id")
@@ -55,11 +59,11 @@ public class Reservation   {
   public Reservation() {
   }
 
-  public Reservation(Boolean confirme, Boolean annule, Train train, Passager passager, Client client, Compagnie compagnie) {
+  public Reservation(Boolean confirme, Boolean annule, Train train, List<Passager> passagers, Client client, Compagnie compagnie) {
     this.confirme = confirme;
     this.annule = annule;
     this.train = train;
-    this.passager = passager;
+    this.passagers = passagers;
     this.client = client;
     this.compagnie = compagnie;
   }
@@ -140,11 +144,11 @@ public class Reservation   {
   **/
   @ApiModelProperty(value = "")
   @Valid
-  public Passager getPassager() {
-    return passager;
+  public List<Passager> getPassager() {
+    return passagers;
   }
-  public void setPassager(Passager passager) {
-    this.passager = passager;
+  public void setPassager(List<Passager> passager) {
+    this.passagers = passager;
   }
 //  public Reservation passager(Passager passager) {
 //    this.passager = passager;
@@ -201,14 +205,14 @@ public class Reservation   {
         Objects.equals(this.confirme, reservation.confirme) &&
         Objects.equals(this.annule, reservation.annule) &&
         Objects.equals(this.train, reservation.train) &&
-        Objects.equals(this.passager, reservation.passager) &&
+        Objects.equals(this.passagers, reservation.passagers) &&
         Objects.equals(this.client, reservation.client) &&
         Objects.equals(this.compagnie, reservation.compagnie);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, confirme, annule, train, passager, client, compagnie);
+    return Objects.hash(id, confirme, annule, train, passagers, client, compagnie);
   }
 
   @Override
@@ -220,7 +224,7 @@ public class Reservation   {
     sb.append("    confirme: ").append(toIndentedString(confirme)).append("\n");
     sb.append("    annule: ").append(toIndentedString(annule)).append("\n");
     sb.append("    trains: ").append(toIndentedString(train)).append("\n");
-    sb.append("    passager: ").append(toIndentedString(passager)).append("\n");
+    sb.append("    passagers: ").append(toIndentedString(passagers)).append("\n");
     sb.append("    client: ").append(toIndentedString(client)).append("\n");
     sb.append("    compagnie: ").append(toIndentedString(compagnie)).append("\n");
     sb.append("}");

@@ -30,7 +30,7 @@ public class Passager   {
   @JsonProperty("prenom")
   private String prenom = null;
 
-  @OneToMany(mappedBy = "passager", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+  @ManyToMany(mappedBy = "passagers")
   private List<Reservation> reservations;
 
   public Passager() {
